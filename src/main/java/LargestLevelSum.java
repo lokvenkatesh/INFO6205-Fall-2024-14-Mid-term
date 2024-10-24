@@ -26,54 +26,62 @@ public class LargestLevelSum {
      * @return the largest sum of any level in the tree
      */
     public static int maxLevelSum(TreeNode root) {
-        // TODO: Implement the logic to find the maximum level sum of the given binary tree.
-        Queue<TreeNode> queue = new LinkedList<>();
-
-        while (!queue.isEmpty()) {
-            //TODO: Logic to process nodes at the current level will go here.
+        if (root == null) {
+            return 0;
         }
 
-        //TODO: Placeholder to return the max level sum; replace 0 with the correct value.
-        return 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        int maxSum = Integer.MIN_VALUE;
+
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            int currentLevelSum = 0;
+
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode currentNode = queue.poll();
+                currentLevelSum += currentNode.val;
+
+
+                if (currentNode.left != null) {
+                    queue.offer(currentNode.left);
+                }
+                if (currentNode.right != null) {
+                    queue.offer(currentNode.right);
+                }
+            }
+
+
+            maxSum = Math.max(maxSum, currentLevelSum);
+        }
+
+        return maxSum;
     }
 
 
-    /**
-     * Builds a binary tree from a level-order traversal array.
-     *
-     * @param levelOrder the level-order traversal array
-     * @return the root of the constructed binary tree
-     */
     public static TreeNode buildTreeFromLevelOrder(Integer[] levelOrder) {
-
         if (levelOrder == null || levelOrder.length == 0) {
             return null;
         }
 
-
         TreeNode root = (levelOrder[0] != null) ? new TreeNode(levelOrder[0]) : null;
-
         if (root == null) return null;
 
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
 
         int i = 1;
-
         while (i < levelOrder.length) {
             TreeNode currentNode = queue.poll();
 
-
             if (levelOrder[i] != null) {
-                assert currentNode != null;
                 currentNode.left = new TreeNode(levelOrder[i]);
                 queue.add(currentNode.left);
             }
             i++;
 
-
             if (i < levelOrder.length && levelOrder[i] != null) {
-                assert currentNode != null;
                 currentNode.right = new TreeNode(levelOrder[i]);
                 queue.add(currentNode.right);
             }
